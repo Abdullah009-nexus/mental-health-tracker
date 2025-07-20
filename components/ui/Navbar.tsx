@@ -1,134 +1,143 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useTheme } from "next-themes";
-import { Switch } from "@/components/ui/switch";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import React, { useState } from 'react';
+import { useTheme } from 'next-themes';
+import { Heart, Calendar, BarChart3, BookOpen, Settings, Bell, User, Menu, X, Sun, Moon } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Navbar() {
-  const router = useRouter();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [notifications] = useState(3);
   const { theme, setTheme } = useTheme();
-  const [menuOpen, setMenuOpen] = useState(false);
 
-  // Simple nav links array for easy mapping
-  const navLinks = [
-    { label: "Mood Tracker", href: "/mood" },
-    { label: "Journal", href: "/journal" },
-    { label: "Dashboard", href: "/dashboard" },
-  ];
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const toggleTheme = () => setTheme(theme === 'dark' ? 'light' : 'dark');
 
   return (
-    <nav className="backdrop-blur-md bg-white/60 dark:bg-black/40 shadow-lg px-4 md:px-8 sticky top-0 z-50 transition-all duration-300">
-      <div className="flex items-center justify-between h-16">
-        {/* Logo/Title */}
-        <a
-          onClick={() => router.push("/")}
-          className="text-2xl font-extrabold cursor-pointer select-none flex items-center gap-2 transition-transform duration-300 hover:scale-105 hover:text-blue-600 dark:hover:text-blue-300"
-        >
-          <span className="transition-all duration-300">🌿</span>
-          <span className="hidden sm:inline-block">Mental Health</span>
-        </a>
+    <nav className="w-full bg-white dark:bg-gray-900 shadow-lg border-b border-gray-200 dark:border-gray-700 transition-colors">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          {/* Logo */}
+          <Link href="/" className="flex items-center space-x-2">
+            <div className="p-2 rounded-xl bg-emerald-500 dark:bg-emerald-600">
+              <Heart className="h-6 w-6 text-white" />
+            </div>
+            <span className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+              MindTrack
+            </span>
+          </Link>
 
-        {/* Desktop Nav Links */}
-        <div className="hidden md:flex items-center gap-6">
-          {navLinks.map((link) => (
-            <button
-              key={link.href}
-              onClick={() => router.push(link.href)}
-              className="relative px-2 py-1 font-medium text-base text-gray-700 dark:text-gray-200 transition-colors duration-200 hover:text-blue-600 dark:hover:text-blue-300 focus:outline-none"
-            >
-              <span className="z-10 relative">{link.label}</span>
-              <span className="absolute left-0 bottom-0 w-full h-0.5 bg-gradient-to-r from-blue-400 to-green-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full" />
-            </button>
-          ))}
-          {/* Dark Mode Toggle */}
-          <div className="ml-2 flex items-center">
-            <Switch
-              checked={theme === "dark"}
-              onCheckedChange={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="transition-all duration-300"
-            />
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-8">
+            <NavItem href="/mood-check" icon={Calendar} text="Mood Check" />
+            <NavItem href="/analytics" icon={BarChart3} text="Analytics" />
+            <NavItem href="/journal" icon={BookOpen} text="Journal" />
+            <NavItem href="/goals" icon={Settings} text="Goals" />
           </div>
-          {/* Profile Dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Avatar>
-                <AvatarFallback className="transition-transform duration-300 hover:scale-110">MH</AvatarFallback>
-              </Avatar>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => alert("Profile - Coming Soon!")}>Profile</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => alert("Settings - Coming Soon!")}>Settings</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => alert("Logged Out!")}>Logout</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+
+          {/* Right Side Actions */}
+          <div className="hidden md:flex items-center space-x-4">
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300"
+              title="Toggle theme"
+            >
+              {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </button>
+
+            {/* Notifications */}
+            <button className="relative p-2 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300">
+              <Bell className="h-5 w-5" />
+              {notifications > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {notifications}
+                </span>
+              )}
+            </button>
+
+            {/* Sign In Button */}
+            <Link href="/auth/signin">
+              <button className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-6 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-lg">
+                Sign In
+              </button>
+            </Link>
+
+            {/* User Profile (when signed in) */}
+            <button className="p-2 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300">
+              <User className="h-5 w-5" />
+            </button>
+          </div>
+
+          {/* Mobile menu button */}
+          <button
+            onClick={toggleMenu}
+            className="md:hidden p-2 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300"
+          >
+            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
         </div>
 
-        {/* Hamburger for Mobile */}
-        <button
-          className="md:hidden flex flex-col justify-center items-center w-10 h-10 group relative z-50"
-          aria-label="Toggle menu"
-          onClick={() => setMenuOpen((v) => !v)}
-        >
-          <span
-            className={`block w-7 h-0.5 bg-gray-700 dark:bg-gray-200 rounded transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-2" : ""}`}
-          ></span>
-          <span
-            className={`block w-7 h-0.5 bg-gray-700 dark:bg-gray-200 rounded transition-all duration-300 my-1 ${menuOpen ? "opacity-0" : ""}`}
-          ></span>
-          <span
-            className={`block w-7 h-0.5 bg-gray-700 dark:bg-gray-200 rounded transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`}
-          ></span>
-        </button>
-      </div>
-
-      {/* Mobile Menu */}
-      <div
-        className={`md:hidden fixed inset-0 bg-black/40 z-40 transition-opacity duration-300 ${menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
-        onClick={() => setMenuOpen(false)}
-      />
-      <div
-        className={`md:hidden fixed top-0 right-0 w-3/4 max-w-xs h-full bg-white dark:bg-gray-900 shadow-lg z-50 transform transition-transform duration-300 ${menuOpen ? "translate-x-0" : "translate-x-full"}`}
-      >
-        <div className="flex flex-col gap-6 p-6 pt-20">
-          {navLinks.map((link) => (
-            <button
-              key={link.href}
-              onClick={() => {
-                setMenuOpen(false);
-                router.push(link.href);
-              }}
-              className="text-lg font-semibold text-gray-700 dark:text-gray-200 transition-colors duration-200 hover:text-blue-600 dark:hover:text-blue-300 text-left"
-            >
-              {link.label}
-            </button>
-          ))}
-          <div className="flex items-center gap-2 mt-4">
-            <span className="text-gray-600 dark:text-gray-300 text-sm">Dark Mode</span>
-            <Switch
-              checked={theme === "dark"}
-              onCheckedChange={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="transition-all duration-300"
-            />
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div className="md:hidden border-t border-gray-200 dark:border-gray-700">
+            <div className="py-4 space-y-1">
+              <MobileNavItem href="/mood-check" icon={Calendar} text="Mood Check" onClick={() => setIsMenuOpen(false)} />
+              <MobileNavItem href="/analytics" icon={BarChart3} text="Analytics" onClick={() => setIsMenuOpen(false)} />
+              <MobileNavItem href="/journal" icon={BookOpen} text="Journal" onClick={() => setIsMenuOpen(false)} />
+              <MobileNavItem href="/goals" icon={Settings} text="Goals" onClick={() => setIsMenuOpen(false)} />
+              
+              <div className="pt-4 border-t border-gray-200 dark:border-gray-700 space-y-3">
+                <div className="flex items-center justify-between px-4">
+                  <span className="text-sm text-gray-600 dark:text-gray-300">
+                    Dark Mode
+                  </span>
+                  <button
+                    onClick={toggleTheme}
+                    className="p-2 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300"
+                  >
+                    {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+                  </button>
+                </div>
+                
+                <Link href="/auth/signin" className="block px-4">
+                  <button 
+                    className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white py-3 rounded-lg font-medium transition-all duration-200"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Sign In
+                  </button>
+                </Link>
+              </div>
+            </div>
           </div>
-          <div className="mt-4">
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <Avatar>
-                  <AvatarFallback className="transition-transform duration-300 hover:scale-110">MH</AvatarFallback>
-                </Avatar>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => alert("Profile - Coming Soon!")}>Profile</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => alert("Settings - Coming Soon!")}>Settings</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => alert("Logged Out!")}>Logout</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </div>
+        )}
       </div>
     </nav>
+  );
+}
+
+function NavItem({ href, icon: Icon, text }: { href: string; icon: any; text: string }) {
+  return (
+    <Link href={href}>
+      <button className="flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-200 group hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+        <Icon className="h-5 w-5 group-hover:scale-110 transition-transform" />
+        <span className="font-medium">{text}</span>
+      </button>
+    </Link>
+  );
+}
+
+function MobileNavItem({ href, icon: Icon, text, onClick }: { href: string; icon: any; text: string; onClick: () => void }) {
+  return (
+    <Link href={href}>
+      <button 
+        className="flex items-center space-x-3 px-4 py-3 w-full text-left transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+        onClick={onClick}
+      >
+        <Icon className="h-5 w-5" />
+        <span className="font-medium">{text}</span>
+      </button>
+    </Link>
   );
 }
