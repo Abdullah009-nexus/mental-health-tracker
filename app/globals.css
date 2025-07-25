@@ -6,6 +6,7 @@ html {
 @tailwind components;
 @tailwind utilities;
 
+/* Light Mode Variables */
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -30,6 +31,7 @@ html {
     --radius: 0.5rem;
   }
 
+  /* Dark Mode Variables */
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
@@ -53,11 +55,25 @@ html {
   }
 }
 
+/* Basic Styles for All Pages */
 @layer base {
   * {
     @apply border-border;
   }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground min-h-screen font-sans antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-semibold text-foreground;
+  }
+
+  input, textarea {
+    @apply rounded-md border px-3 py-2 w-full;
+  }
+
+  button {
+    @apply rounded-md px-4 py-2 font-medium;
   }
 }
