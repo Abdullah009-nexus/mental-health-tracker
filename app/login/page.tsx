@@ -1,75 +1,67 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { supabase } from '@/lib/supabaseClient'
+import { useState } from "react";
 
-export default function LoginPage() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('') // not used in magic link flow
-  const [message, setMessage] = useState('')
+export default function Login() {
+  const [email, setEmail] = useState("");
+  const [sent, setSent] = useState(false);
 
   const handleLogin = async () => {
-    const { error } = await supabase.auth.signInWithOtp({ email })
-    if (error) {
-      setMessage('❌ Error sending magic link')
-    } else {
-      setMessage('✅ Check your email for the login link')
+    if (!email) return;
+    try {
+      console.log("Sending sign-in link to:", email);
+      setSent(true);
+    } catch (error) {
+      console.error("Login error:", error);
     }
-  }
+  };
 
   return (
-    <div className="fixed inset-0 w-screen h-screen overflow-hidden">
+    <div className="relative w-full min-h-screen overflow-hidden m-0 p-0">
       {/* Background Video */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover z-0"
-      >
-        <source src="/bg.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+      <div className="fixed inset-0 w-full h-full overflow-hidden m-0 p-0">
+        <video
+          className="absolute inset-0 w-full h-full object-cover z-[-1]"
+          autoPlay
+          loop
+          muted
+          playsInline
+        >
+          <source src="/bg.mp4" type="video/mp4" />
+        </video>
+      </div>
 
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black bg-opacity-60 z-10" />
+      {/* Fullscreen Blur Overlay */}
+      <div className="fixed top-0 left-0 w-full h-full z-10 flex flex-col items-center justify-center px-4 text-white text-center bg-black/30 backdrop-blur-sm">
+        <h1 className="text-4xl font-bold mb-4 drop-shadow-md">Sign In</h1>
 
-      {/* Login Box */}
-      <div className="relative z-20 flex items-center justify-center min-h-screen p-4">
-        <div className="bg-white bg-opacity-90 p-8 rounded-lg shadow-lg w-full max-w-md">
-          <h2 className="text-2xl font-bold mb-6 text-center text-blue-700">
-            Login to 🧠 Soul Track
-          </h2>
+        {/* Login Box - no border */}
+        <div className="w-full max-w-md bg-black/40 p-6 rounded-xl shadow-lg space-y-4">
+          <p className="text-lg">
+            Enter your email to receive a secure login link.
+          </p>
 
-          <input
-            type="email"
-            placeholder="Enter your email"
-            className="w-full border border-gray-300 p-3 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-
-          <input
-            type="password"
-            placeholder="Enter your password"
-            className="w-full border border-gray-300 p-3 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            disabled
-          />
-
-          <button
-            onClick={handleLogin}
-            className="w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition"
-          >
-            🔐 Send Magic Link
-          </button>
-
-          {message && (
-            <p className="mt-4 text-center text-sm text-gray-800">{message}</p>
+          {!sent ? (
+            <>
+              <input
+                type="email"
+                placeholder="your@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-2 rounded-md border border-gray-500 bg-transparent text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+              <button
+                onClick={handleLogin}
+                className="w-full py-2 px-4 rounded-md border border-white text-white hover:bg-white hover:text-black transition"
+              >
+                Send Sign-In Link
+              </button>
+            </>
+          ) : (
+            <p className="text-green-400">Check your email for the login link!</p>
           )}
         </div>
       </div>
     </div>
-  )
+  );
 }

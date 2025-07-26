@@ -1,33 +1,35 @@
-'use client'
+// app/dashboard/page.tsx
+"use client";
 
-import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabaseClient'
+import { useEffect, useState } from "react";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useRouter } from "next/navigation";
 
-export default function Dashboard() {
-  const [email, setEmail] = useState('')
+export default function DashboardPage() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const supabase = createClientComponentClient();
 
   useEffect(() => {
-    const getSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (session) {
-        setEmail(session.user.email)
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        router.replace("/"); // redirect to home if not signed in
+      } else {
+        setLoading(false);
       }
-    }
-    getSession()
-  }, [])
+    };
+    checkSession();
+  }, [router, supabase]);
+
+  if (loading) {
+    return <div className="text-white text-center p-8">Loading Dashboard...</div>;
+  }
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-center space-y-3">
-        <h1 className="text-3xl font-bold">Welcome to your Dashboard</h1>
-        <p className="text-lg text-gray-600">Logged in as: {email}</p>
-        <button
-          onClick={() => supabase.auth.signOut()}
-          className="bg-red-500 text-white px-4 py-2 rounded"
-        >
-          Logout
-        </button>
-      </div>
+    <div className="text-white p-8">
+      <h1 className="text-2xl font-bold">Dashboard</h1>
+      <p>Your AI tools will show here.</p>
     </div>
-  )
+  );
 }
