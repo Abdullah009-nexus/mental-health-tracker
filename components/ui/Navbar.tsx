@@ -1,16 +1,31 @@
 "use client";
+
 import Link from "next/link";
-import React from "react";
 
 export default function Navbar() {
   return (
-    <nav className="w-full bg-white/80 backdrop-blur border-b border-gray-200 fixed top-0 left-0 z-50">
-      <div className="max-w-5xl mx-auto px-4 flex h-16 items-center justify-between">
-        <Link href="/" className="text-2xl font-bold text-blue-600">
-          MindFlow
-        </Link>
-        <div>
-          <Link href="/login" className="px-4 py-2 rounded bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors">
+    <nav className="w-full bg-white border-b shadow-md py-4">
+      <div className="max-w-screen-lg mx-auto flex items-center justify-center">
+        <div className="flex items-center gap-10">
+          {/* Logo */}
+          <Link href="/" className="text-xl font-bold text-blue-700">
+            🧠 MindMate
+          </Link>
+
+          {/* Nav Links */}
+          <Link href="/features" className="text-gray-700 hover:text-blue-600 font-medium">
+            Features
+          </Link>
+          <Link href="/signup" className="text-gray-700 hover:text-blue-600 font-medium">
+            Signup
+          </Link>
+          <Link href="/privacy" className="text-gray-700 hover:text-blue-600 font-medium">
+            Privacy
+          </Link>
+          <Link href="/about" className="text-gray-700 hover:text-blue-600 font-medium">
+            About
+          </Link>
+          <Link href="/login" className="text-gray-700 hover:text-blue-600 font-medium">
             Login
           </Link>
         </div>

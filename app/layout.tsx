@@ -1,13 +1,12 @@
+import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import './globals.css'
-import { cn } from "@/lib/utils"
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'MindFlow - AI Mental Health Tracker',
-  description: 'Transform your mental health journey with intelligent AI insights',
+  title: 'Tailwind Test',
+  description: 'Test if tailwind layout classes work',
 }
 
 export default function RootLayout({
@@ -16,8 +15,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={cn("min-h-screen bg-background font-sans antialiased", inter.className)}>{children}</body>
+    <html lang="en">
+      <body className={`${inter.className} bg-gray-100 min-h-screen`}>
+        {children}
+      </body>
     </html>
   )
 }
