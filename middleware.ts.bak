@@ -1,0 +1,6 @@
+import { NextRequest, NextResponse } from 'next/server';
+
+// ✅ TEMPORARY: Allow ALL routes to work without Supabase login
+export async function middleware(req: NextRequest) {
+  return NextResponse.next();
+}
