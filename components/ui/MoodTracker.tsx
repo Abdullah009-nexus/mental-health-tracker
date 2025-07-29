@@ -1,4 +1,3 @@
-// components/ui/MoodTracker.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -11,19 +10,23 @@ const moods = [
   { icon: <Laugh size={28} />, label: "Excited" },
 ];
 
-export function MoodTracker() {
+export function MoodTracker({ onMoodSelect }: { onMoodSelect?: (mood: string) => void }) {
   const [selected, setSelected] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     const savedMood = localStorage.getItem("mood-today");
-    if (savedMood) setSelected(savedMood);
+    if (savedMood) {
+      setSelected(savedMood);
+      onMoodSelect?.(savedMood);
+    }
   }, []);
 
   const handleSelect = (label: string) => {
     localStorage.setItem("mood-today", label);
     setSelected(label);
     setSaved(true);
+    onMoodSelect?.(label);
     setTimeout(() => setSaved(false), 2000);
   };
 

@@ -6,7 +6,7 @@ import Navbar from "@/components/ui/Navbar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Mental Health Tracker",
+  title: "Soul Track",
   description: "AI-powered wellbeing companion",
 };
 

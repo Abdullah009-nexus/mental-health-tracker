@@ -1,84 +1,70 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Send } from "lucide-react";
+import { useState } from 'react';
+import { SendHorizonal } from 'lucide-react';
 
-export function ChatBox() {
-  const [showChat, setShowChat] = useState(false);
-  const [messages, setMessages] = useState<{ role: string; text: string }[]>([]);
-  const [input, setInput] = useState("");
+export default function ChatBox() {
+  const [messages, setMessages] = useState([{ role: 'assistant', content: 'Hi! How can I help you today?' }]);
+  const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSend = async () => {
+  const sendMessage = async () => {
     if (!input.trim()) return;
 
-    const userMessage = { role: "user", text: input };
-    setMessages((prev) => [...prev, userMessage]);
-    setInput("");
+    const newMessages = [...messages, { role: 'user', content: input }];
+    setMessages(newMessages);
+    setInput('');
     setLoading(true);
 
     try {
-      const res = await fetch("https://soultrack.app.n8n.cloud/webhook-test/webhook-chat-ai", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: input }),
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: newMessages }),
       });
 
       const data = await res.json();
-      const botMessage = { role: "bot", text: data.answer || "I didn't understand that." };
-      setMessages((prev) => [...prev, botMessage]);
+      const reply = data.choices?.[0]?.message?.content;
+
+      setMessages([...newMessages, { role: 'assistant', content: reply }]);
     } catch (err) {
-      setMessages((prev) => [...prev, { role: "bot", text: "❌ Error contacting AI." }]);
-    } finally {
-      setLoading(false);
+      setMessages([...newMessages, { role: 'assistant', content: 'Error: Could not connect to AI' }]);
     }
+
+    setLoading(false);
   };
 
   return (
-    <>
-      <button
-        onClick={() => setShowChat(!showChat)}
-        className="fixed bottom-6 right-6 z-50 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-xl"
-      >
-        💬
-      </button>
+    <div className="fixed bottom-4 right-4 w-full max-w-sm bg-white border border-gray-200 shadow-xl rounded-2xl flex flex-col overflow-hidden">
+      <div className="px-4 py-2 font-semibold text-white bg-gradient-to-r from-purple-600 to-indigo-600">
+        Soul Track Bot
+      </div>
 
-      {showChat && (
-        <div className="fixed bottom-20 right-6 w-80 h-96 bg-white shadow-lg rounded-lg flex flex-col overflow-hidden z-50 border">
-          <div className="bg-blue-600 text-white p-3 font-semibold">AI Companion</div>
-          <div className="flex-1 p-3 overflow-y-auto space-y-2">
-            {messages.map((msg, idx) => (
-              <div
-                key={idx}
-                className={`p-2 rounded-md text-sm ${
-                  msg.role === "user"
-                    ? "bg-blue-100 text-right ml-auto max-w-[80%]"
-                    : "bg-gray-200 text-left mr-auto max-w-[80%]"
-                }`}
-              >
-                {msg.text}
-              </div>
-            ))}
-            {loading && (
-              <div className="p-2 rounded-md text-sm bg-gray-100 text-left mr-auto max-w-[80%] animate-pulse">
-                AI is typing...
-              </div>
-            )}
+      <div className="flex-1 max-h-96 overflow-y-auto px-4 py-2 space-y-2 text-sm">
+        {messages.map((msg, i) => (
+          <div key={i} className={`p-2 rounded-lg ${msg.role === 'user' ? 'bg-gray-100 text-right' : 'bg-indigo-100 text-left'}`}>
+            {msg.content}
           </div>
-          <div className="flex p-2 border-t">
-            <input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSend()}
-              className="flex-1 p-2 text-sm border rounded-md"
-              placeholder="Ask something..."
-            />
-            <button onClick={handleSend} className="ml-2 p-2 text-blue-600 hover:text-blue-800">
-              <Send size={18} />
-            </button>
-          </div>
-        </div>
-      )}
-    </>
+        ))}
+        {loading && <div className="text-gray-400 italic">Typing...</div>}
+      </div>
+
+      <div className="flex items-center border-t px-2 py-1">
+        <input
+          className="flex-1 px-3 py-2 text-sm outline-none"
+          placeholder="Type your message..."
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+        />
+        <button
+          className="p-2 hover:text-indigo-600"
+          onClick={sendMessage}
+          disabled={loading}
+        >
+          <SendHorizonal size={18} />
+        </button>
+      </div>
+    </div>
   );
 }
