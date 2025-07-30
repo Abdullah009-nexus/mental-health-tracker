@@ -9,9 +9,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   useEffect(() => {
     const user = localStorage.getItem('mock-user');
     if (!user) {
-      router.replace('/login'); // Redirect if not logged in
+      router.replace('/login'); // Redirect to login if not logged in
     }
-  }, []);
+  }, [router]);
 
   return <>{children}</>;
 }

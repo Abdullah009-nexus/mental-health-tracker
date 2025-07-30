@@ -9,16 +9,14 @@ export default function AuthCallbackPage() {
   const supabase = createClientComponentClient();
 
   useEffect(() => {
-    const handleSignIn = async () => {
-      // Get session from URL hash and store it
-      await supabase.auth.getSession();
-
-      // Redirect to dashboard after successful login
+    const redirect = async () => {
+      // optional small delay to allow Supabase to handle session
+      await new Promise((r) => setTimeout(r, 1000));
       router.replace('/dashboard');
     };
 
-    handleSignIn();
-  }, [supabase, router]);
+    redirect();
+  }, [router]);
 
   return (
     <div className="flex items-center justify-center h-screen">

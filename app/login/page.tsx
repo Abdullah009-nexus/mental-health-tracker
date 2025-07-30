@@ -1,28 +1,33 @@
+// app/login/page.tsx
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 export default function Login() {
   const [email, setEmail] = useState('');
-  const router = useRouter();
-  const [_, startTransition] = useTransition();
+  const [message, setMessage] = useState('');
+  const supabase = createClientComponentClient();
 
-  const handleMockLogin = () => {
+  const handleLogin = async () => {
     if (!email) return;
 
-    // Save user email to localStorage
-    localStorage.setItem('mock-user', JSON.stringify({ email }));
-
-    // Use startTransition to ensure navigation works properly
-    startTransition(() => {
-      router.push('/dashboard');
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: `${location.origin}/auth/callback`,
+      },
     });
+
+    if (error) {
+      setMessage('Error sending email. Try again.');
+    } else {
+      setMessage('Magic link sent! Check your inbox.');
+    }
   };
 
   return (
     <div className="relative w-full min-h-screen overflow-hidden m-0 p-0">
-      {/* Background Video */}
       <div className="fixed inset-0 w-full h-full overflow-hidden m-0 p-0">
         <video
           className="absolute inset-0 w-full h-full object-cover z-[-1]"
@@ -35,11 +40,10 @@ export default function Login() {
         </video>
       </div>
 
-      {/* Fullscreen Blur Overlay */}
       <div className="fixed top-0 left-0 w-full h-full z-10 flex flex-col items-center justify-center px-4 text-white text-center bg-black/30 backdrop-blur-sm">
-        <h1 className="text-4xl font-bold mb-4 drop-shadow-md">Mock Sign In</h1>
+        <h1 className="text-4xl font-bold mb-4 drop-shadow-md">Magic Link Sign In</h1>
         <div className="w-full max-w-md bg-black/40 p-6 rounded-xl shadow-lg space-y-4">
-          <p className="text-lg">Enter your email to sign in temporarily.</p>
+          <p className="text-lg">Enter your email to sign in.</p>
           <input
             type="email"
             placeholder="your@email.com"
@@ -48,11 +52,12 @@ export default function Login() {
             className="w-full px-4 py-2 rounded-md border border-gray-500 bg-transparent text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
           <button
-            onClick={handleMockLogin}
+            onClick={handleLogin}
             className="w-full py-2 px-4 rounded-md border border-white text-white hover:bg-white hover:text-black transition"
           >
-            Mock Login
+            Send Magic Link
           </button>
+          {message && <p className="text-green-400">{message}</p>}
         </div>
       </div>
     </div>
