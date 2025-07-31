@@ -23,12 +23,24 @@ export default function ChatBox() {
         body: JSON.stringify({ messages: newMessages }),
       });
 
+      console.log('Response status:', res.status);
+      
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
       const data = await res.json();
-      const reply = data.choices?.[0]?.message?.content;
+      console.log('API Response:', data);
+      
+      const reply = data.choices?.[0]?.message?.content || data.message || 'Hi, I am your Soul Track Bot. How can I support you today?';
 
       setMessages([...newMessages, { role: 'assistant', content: reply }]);
     } catch (err) {
-      setMessages([...newMessages, { role: 'assistant', content: 'Error: Could not connect to AI' }]);
+      console.error('Chat error:', err);
+      setMessages([...newMessages, { 
+        role: 'assistant', 
+        content: `Error: ${err instanceof Error ? err.message : 'Could not connect to AI'}. Please check the console for more details.` 
+      }]);
     }
 
     setLoading(false);

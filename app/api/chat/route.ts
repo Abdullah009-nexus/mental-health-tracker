@@ -5,19 +5,38 @@ export async function POST(req: Request) {
     const body = await req.json();
     const messages = body.messages;
 
-    // Log the incoming messages (optional)
-    console.log("Received messages:", messages);
+    const openRouterApiKey = process.env.OPENROUTER_API_KEY;
+    if (!openRouterApiKey) {
+      throw new Error('Missing OpenRouter API Key');
+    }
 
-    const replyMessage = {
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${openRouterApiKey}`,
+      },
+      body: JSON.stringify({
+        model: 'openai/gpt-3.5-turbo', // you can also try 'openai/gpt-4' or any other model
+        messages: messages.map((msg: any) => ({
+          role: msg.role,
+          content: msg.content,
+        })),
+      }),
+    });
+
+    const data = await response.json();
+
+    const reply = data.choices?.[0]?.message || {
       role: 'assistant',
-      content: 'Hi, I am your Soul Track Bot. How can I support you today?',
+      content: 'I am here to support you. Please try again.',
     };
 
     return NextResponse.json({
-      choices: [{ message: replyMessage }],
+      choices: [{ message: reply }],
     });
   } catch (error) {
-    console.error('Error in Soul Track Bot API:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    console.error('Error in OpenRouter API:', error);
+    return NextResponse.json({ error: 'Failed to get AI response' }, { status: 500 });
   }
 }

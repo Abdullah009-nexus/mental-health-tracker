@@ -24,7 +24,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="w-full px-6 py-4 bg-transparent shadow-md fixed top-0 z-50">
+    <nav className="w-full px-6 py-4 backdrop-blur-md bg-black/20 shadow-md fixed top-0 z-50">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         {/* Logo */}
         <Link href="/" className="text-2xl font-bold text-blue-100">

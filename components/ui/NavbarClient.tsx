@@ -24,7 +24,7 @@ export default function NavbarClient() {
   };
 
   return (
-    <nav className="flex items-center justify-between px-6 py-4 border-b border-white/10 backdrop-blur-md bg-black/50 text-white">
+    <nav className="flex items-center justify-between px-6 py-4 border-b border-white/10 backdrop-blur-md bg-black/20 text-white">
       <Link href="/" className="text-xl font-bold">
         Mental Health Tracker
       </Link>

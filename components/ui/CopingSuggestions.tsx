@@ -46,28 +46,63 @@ export function CopingSuggestions({ mood }: { mood: string | null }) {
         desc: "Try a quick breathing exercise to stay balanced.",
       },
     ],
+    Angry: [
+      {
+        title: "Do a 5-minute anger release meditation",
+        desc: "Guided practice to release tension.",
+        link: "https://www.youtube.com/watch?v=bo1ZAcK3xDk",
+      },
+      {
+        title: "Take a pause",
+        desc: "Walk away and breathe deeply before responding.",
+      },
+    ],
+    Anxious: [
+      {
+        title: "Ground yourself with 5-4-3-2-1 technique",
+        desc: "Focus on your senses to stay present.",
+        link: "https://www.youtube.com/watch?v=WFsYkJ5zW3o",
+      },
+      {
+        title: "Try progressive muscle relaxation",
+        desc: "Helps reduce body tension and anxiety.",
+        link: "https://www.youtube.com/watch?v=1nZEdqcGVzo",
+      },
+    ],
+    Calm: [
+      {
+        title: "Enjoy the calm moment",
+        desc: "Reflect on what helped you feel this way.",
+      },
+      {
+        title: "Maintain balance",
+        desc: "Listen to peaceful nature sounds.",
+        link: "https://www.youtube.com/watch?v=lFcSrYw-ARY",
+      },
+    ],
   };
 
   const moodSuggestions = suggestions[mood] || [];
 
   return (
-    <div className="max-w-xl mx-auto bg-white rounded-xl shadow-md p-6 mb-6">
-      <h2 className="text-xl font-semibold mb-4 text-gray-800">
+    <div className="max-w-xl mx-auto rounded-xl p-6 mb-6">
+      <h2 className="text-xl font-semibold mb-4 text-white">
         Suggestions for when you're feeling {mood}
       </h2>
       <div className="space-y-4">
         {moodSuggestions.map((sug, idx) => (
           <div
             key={idx}
-            className="border rounded-md p-4 hover:bg-gray-50 transition"
+            className="rounded-md p-4 hover:bg-white/10 transition"
           >
-            <h3 className="text-lg font-semibold text-blue-600">{sug.title}</h3>
-            <p className="text-sm text-gray-600 mb-2">{sug.desc}</p>
+            <h3 className="text-lg font-semibold text-blue-200">{sug.title}</h3>
+            <p className="text-sm text-white mb-2">{sug.desc}</p>
             {sug.link && (
               <a
                 href={sug.link}
                 target="_blank"
-                className="text-sm text-blue-500 hover:underline"
+                rel="noopener noreferrer"
+                className="text-sm text-blue-300 hover:underline"
               >
                 Try Now →
               </a>
