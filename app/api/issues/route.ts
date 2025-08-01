@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { connectToDB } from "@/lib/mongodb"; // we'll create this
-import { getUser } from "@/lib/supabase-session"; // optional
+import { connectToDB } from "@/lib/mongodb"; // 
 import { IssueModel } from "@/models/Issue"; // to be created
 
 export async function POST(req: Request) {

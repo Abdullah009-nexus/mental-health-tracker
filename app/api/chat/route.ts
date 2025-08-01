@@ -17,7 +17,7 @@ export async function POST(req: Request) {
         Authorization: `Bearer ${openRouterApiKey}`,
       },
       body: JSON.stringify({
-        model: 'openai/gpt-3.5-turbo', // you can also try 'openai/gpt-4' or any other model
+        model: 'openai/gpt-3.5-turbo', //  model
         messages: messages.map((msg: any) => ({
           role: msg.role,
           content: msg.content,

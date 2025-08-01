@@ -1,5 +1,7 @@
+// components/ui/MoodTracker.tsx
 'use client';
 
+// Mood Tracker UI to let users select how they feel
 import { useState } from 'react';
 
 const moods = ['Happy', 'Sad', 'Anxious', 'Excited', 'Angry', 'Calm'];
@@ -22,9 +24,7 @@ export function MoodTracker({ onMoodSelect }: { onMoodSelect: (mood: string) => 
               key={mood}
               onClick={() => handleSelect(mood)}
               className={`px-4 py-2 rounded-full text-white transition-all ${
-                selected === mood
-                  ? 'bg-blue-600'
-                  : 'bg-transparent hover:bg-white/10'
+                selected === mood ? 'bg-blue-600' : 'bg-transparent hover:bg-white/10'
               }`}
             >
               {mood}
