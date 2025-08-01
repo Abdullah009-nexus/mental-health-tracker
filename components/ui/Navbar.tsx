@@ -41,6 +41,7 @@ export default function Navbar() {
               <Link href="/dashboard/insight">AI Insight</Link>
               <Link href="/dashboard/moodtracker">Mood Tracker</Link>
               <Link href="/dashboard/history">History</Link>
+              
               <button onClick={handleSignOut} className="hover:text-blue-300">
                 🚪 Sign Out
               </button>

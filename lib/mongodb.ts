@@ -1,17 +1,33 @@
+// lib/mongo.ts
 import mongoose from "mongoose";
 
-let isConnected = false;
+const MONGODB_URI = process.env.MONGODB_URI as string;
 
-export async function connectToDB() {
-  if (isConnected) return;
+if (!MONGODB_URI) {
+  throw new Error("Please define the MONGODB_URI environment variable inside .env.local");
+}
 
-  try {
-    await mongoose.connect(process.env.MONGODB_URI!, {
-      dbName: "mental-health",
-    });
-    isConnected = true;
-    console.log("MongoDB connected");
-  } catch (err) {
-    console.error("MongoDB Error:", err);
+let cached = (global as any).mongoose;
+
+if (!cached) {
+  cached = (global as any).mongoose = { conn: null, promise: null };
+}
+
+export async function connectToDatabase() {
+  if (cached.conn) return cached.conn;
+
+  if (!cached.promise) {
+    cached.promise = mongoose
+      .connect(MONGODB_URI, {
+        dbName: "soultrack",
+        bufferCommands: false,
+      })
+      .then((mongoose) => {
+        console.log("✅ Connected to MongoDB");
+        return mongoose;
+      });
   }
+
+  cached.conn = await cached.promise;
+  return cached.conn;
 }
