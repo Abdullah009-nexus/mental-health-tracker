@@ -31,7 +31,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         muted
         playsInline
       >
-        <source src="/dash.mp4" type="video/mp4" />
+        <source src="/bg.mp4" type="video/mp4" />
       </video>
 
       {/* Removed the black/blur overlay */}
