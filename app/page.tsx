@@ -1,13 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-//  this line to opt-out of static prerendering
-export const dynamic = "force-dynamic";
-
-export default function HomePage() {
+function HomeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const supabase = createClientComponentClient();
@@ -42,7 +39,6 @@ export default function HomePage() {
 
   return (
     <div className="relative flex items-center justify-center min-h-screen w-full bg-black text-white overflow-hidden">
-      {/* Background Video */}
       <div className="fixed inset-0 w-full h-full overflow-hidden m-0 p-0">
         <video
           className="absolute inset-0 w-full h-full object-cover z-[-1]"
@@ -55,7 +51,6 @@ export default function HomePage() {
         </video>
       </div>
 
-      {/* Content */}
       <div className="relative z-10 h-full w-full flex flex-col items-center justify-center text-white text-center px-6 sm:px-8 md:px-16">
         <h1 className="text-4xl md:text-6xl font-bold mb-6 drop-shadow-lg">
           Welcome to <span className="text-purple-100">SoulTrack</span>
@@ -65,5 +60,13 @@ export default function HomePage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <Suspense fallback={<div className="text-white">Loading...</div>}>
+      <HomeContent />
+    </Suspense>
   );
 }
