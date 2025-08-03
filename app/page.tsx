@@ -1,19 +1,22 @@
 "use client";
 
 import { useEffect, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 function HomeContent() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const supabase = createClientComponentClient();
 
   useEffect(() => {
     const checkMagicLinkLogin = async () => {
-      const hasToken = searchParams.get("access_token");
+      const hash = window.location.hash;
 
-      if (hasToken) {
+      // Extract access_token from hash
+      const params = new URLSearchParams(hash.substring(1)); // remove "#"
+      const accessToken = params.get("access_token");
+
+      if (accessToken) {
         const {
           data: { session },
         } = await supabase.auth.getSession();
@@ -35,7 +38,7 @@ function HomeContent() {
     };
 
     checkMagicLinkLogin();
-  }, [searchParams, supabase, router]);
+  }, [router, supabase]);
 
   return (
     <div className="relative flex items-center justify-center min-h-screen w-full bg-black text-white overflow-hidden">

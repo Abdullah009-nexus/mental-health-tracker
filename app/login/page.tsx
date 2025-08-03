@@ -12,11 +12,12 @@ export default function Login() {
     if (!email) return;
 
     const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: `${location.origin}/dashboard`, // ✅ updated to redirect to dashboard
-      },
-    });
+  email,
+  options: {
+    emailRedirectTo: `${location.origin}/auth/callback`,
+  },
+});
+
 
     if (error) {
       setMessage('Error sending email. Try again.');
