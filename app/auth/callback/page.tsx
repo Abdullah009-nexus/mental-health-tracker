@@ -10,7 +10,7 @@ export default function AuthCallbackPage() {
 
   useEffect(() => {
     const redirect = async () => {
-      // optional small delay to allow Supabase to handle session
+      //  small delay to allow Supabase to handle session
       await new Promise((r) => setTimeout(r, 1000));
       router.replace('/dashboard');
     };

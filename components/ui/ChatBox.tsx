@@ -47,30 +47,37 @@ export default function ChatBox() {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 w-full max-w-sm bg-white border border-gray-200 shadow-xl rounded-2xl flex flex-col overflow-hidden">
+    <div className="fixed bottom-4 right-4 w-full max-w-sm bg-white border border-gray-200 shadow-xl rounded-2xl flex flex-col overflow-hidden z-50">
       <div className="px-4 py-2 font-semibold text-white bg-gradient-to-r from-purple-600 to-indigo-600">
         Soul Track Bot
       </div>
 
-      <div className="flex-1 max-h-96 overflow-y-auto px-4 py-2 space-y-2 text-sm">
+      <div className="flex-1 max-h-96 overflow-y-auto px-4 py-2 space-y-2 text-sm bg-white">
         {messages.map((msg, i) => (
-          <div key={i} className={`p-2 rounded-lg ${msg.role === 'user' ? 'bg-gray-100 text-right' : 'bg-indigo-100 text-left'}`}>
+          <div
+            key={i}
+            className={`p-3 rounded-xl max-w-[80%] whitespace-pre-wrap ${
+              msg.role === 'user'
+                ? 'ml-auto bg-blue-500 text-white text-right'
+                : 'mr-auto bg-indigo-100 text-gray-900'
+            }`}
+          >
             {msg.content}
           </div>
         ))}
         {loading && <div className="text-gray-400 italic">Typing...</div>}
       </div>
 
-      <div className="flex items-center border-t px-2 py-1">
+      <div className="flex items-center border-t px-2 py-1 bg-gray-50">
         <input
-          className="flex-1 px-3 py-2 text-sm outline-none"
+          className="flex-1 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 outline-none bg-white rounded-md"
           placeholder="Type your message..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
         />
         <button
-          className="p-2 hover:text-indigo-600"
+          className="p-2 hover:text-indigo-600 disabled:opacity-50"
           onClick={sendMessage}
           disabled={loading}
         >

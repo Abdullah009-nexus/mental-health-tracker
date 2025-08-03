@@ -1,4 +1,3 @@
-// lib/mongo.ts
 import mongoose from "mongoose";
 
 const MONGODB_URI = process.env.MONGODB_URI as string;
@@ -23,7 +22,7 @@ export async function connectToDatabase() {
         bufferCommands: false,
       })
       .then((mongoose) => {
-        console.log("✅ Connected to MongoDB");
+        console.log(" Connected to MongoDB");
         return mongoose;
       });
   }

@@ -1,4 +1,4 @@
-// app/dashboard/moodtracker/page.tsx
+
 'use client';
 
 import { useState } from 'react';

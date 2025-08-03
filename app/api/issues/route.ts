@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { connectToDB } from "@/lib/mongodb"; // 
-import { IssueModel } from "@/models/Issue"; // to be created
+import { connectToDatabase } from "@/lib/mongodb";  
+import { IssueModel } from "@/lib/models/Issue"; 
 
 export async function POST(req: Request) {
   try {
@@ -10,14 +10,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
 
-    await connectToDB();
-
-    const user = await getUser(); // optional, returns email if session exists
+    await connectToDatabase();
 
     const newIssue = await IssueModel.create({
       issue,
       description,
-      email: user?.email || null,
+      email: null,
       createdAt: new Date(),
     });
 

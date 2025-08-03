@@ -1,7 +1,7 @@
 
 
 import { NextResponse } from "next/server";
-import { connectToDatabase } from "@/lib/mongo";
+import {connectToDatabase } from "@/lib/mongodb";
 import { Insight } from "@/lib/models/Insight";
 
 

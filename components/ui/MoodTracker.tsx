@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import { ChatBubbleIcon } from '@radix-ui/react-icons';
-import { ChatBox } from '@/components/ui/ChatBox';
-import CalmButton from '@/components/ui/CalmButton'; // ✅ still included
+import ChatBox from '@/components/ui/ChatBox';
+
+import CalmButton from '@/components/ui/CalmButton'; 
 
 const moods = ['Happy', 'Sad', 'Anxious', 'Excited', 'Angry', 'Calm'];
 
@@ -35,12 +36,12 @@ export function MoodTracker({ onMoodSelect }: { onMoodSelect: (mood: string) => 
         </div>
       </div>
 
-      {/* ✅ CalmButton shown below, as intended */}
+      {/*  CalmButton shown below, as intended */}
       <div className="mt-6">
         <CalmButton />
       </div>
 
-      {/* ✅ Floating chat icon */}
+      {/*  Floating chat icon */}
       <div className="fixed bottom-4 right-4 z-50">
         <button
           onClick={() => setChatOpen(!chatOpen)}
@@ -50,7 +51,7 @@ export function MoodTracker({ onMoodSelect }: { onMoodSelect: (mood: string) => 
         </button>
       </div>
 
-      {/* ✅ ChatBox shows when toggled */}
+      {/* ChatBox shows when toggled */}
       {chatOpen && (
         <div className="fixed bottom-20 right-4 z-40 w-full max-w-xs">
           <ChatBox />

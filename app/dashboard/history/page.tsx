@@ -24,16 +24,27 @@ export default function HistoryPage() {
 
   return (
     <main className="p-4 max-w-3xl mx-auto space-y-4">
-      <h1 className="text-3xl font-bold">History</h1>
+      <h1 className="text-3xl font-bold text-white">History</h1>
       {insights.length === 0 ? (
-        <p>No past insights yet.</p>
+        <p className="text-gray-300">No past insights yet.</p>
       ) : (
         insights.map((insight) => (
-          <div key={insight._id} className="p-4 border rounded-lg shadow-md">
-            <p className="text-sm text-gray-500">{new Date(insight.createdAt).toLocaleString()}</p>
-            <p><strong>Mood:</strong> {insight.mood}</p>
-            <p><strong>You said:</strong> {insight.userInput}</p>
-            <p><strong>Insight:</strong> {insight.aiResponse}</p>
+          <div
+            key={insight._id}
+            className="p-4 rounded-xl border border-gray-700 backdrop-blur-md bg-black/40 text-white shadow-lg space-y-1"
+          >
+            <p className="text-sm text-gray-400">
+              {new Date(insight.createdAt).toLocaleString()}
+            </p>
+            <p>
+              <strong>Mood:</strong> {insight.mood}
+            </p>
+            <p>
+              <strong>You said:</strong> {insight.userInput}
+            </p>
+            <p>
+              <strong>Insight:</strong> {insight.aiResponse}
+            </p>
           </div>
         ))
       )}

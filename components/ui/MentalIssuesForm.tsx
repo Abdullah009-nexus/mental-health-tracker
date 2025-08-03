@@ -10,7 +10,7 @@ export default function MentalIssuesForm() {
   const [concern, setConcern] = useState("Anxiety");
   const [insight, setInsight] = useState("");
   const [mood, setMood] = useState("");
-  const [chatOpen, setChatOpen] = useState(false); // 👈 for toggling chat
+  const [chatOpen, setChatOpen] = useState(false); //  for toggling chat
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -20,7 +20,7 @@ export default function Help() {
 
       {/* Fullscreen Blur Overlay */}
       <div className="fixed top-0 left-0 w-full h-full z-10 flex flex-col items-center justify-center px-4 text-white text-center bg-black/30 backdrop-blur-sm">
-        <h1 className="text-4xl font-bold mb-4 drop-shadow-md">Need Help? 🤝</h1>
+        <h1 className="text-4xl font-bold mb-4 drop-shadow-md">Need Help? </h1>
 
         {/* Contact Info */}
         <p className="max-w-2xl text-lg mb-8 bg-black/40 p-4 rounded-xl shadow-md">
@@ -34,7 +34,7 @@ export default function Help() {
         </p>
 
         <p className="max-w-2xl text-lg mb-8 bg-black/40 p-4 rounded-xl shadow-md">
-          We're here to support your mental wellness journey every step of the way. 💙
+          We're here to support your mental wellness journey every step of the way. 
         </p>
       </div>
     </div>

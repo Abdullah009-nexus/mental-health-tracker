@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { connectToDatabase } from "@/lib/mongo";
-import { Insight } from "@/models/Insight";
+import { connectToDatabase } from "@/lib/mongodb";
+import { Insight } from "@/lib/models/Insight";
 
 export async function POST(req: Request) {
-  const { concern, text } = await req.json(); // ✅ match frontend
+  const { concern, text } = await req.json();
 
   const userPrompt = `The user is struggling with **${concern}**.\n\nThey said: "${text}".\n\nRespond with a calm, therapist-style insight that acknowledges their feeling and gives short, supportive advice.`;
 
@@ -13,14 +13,13 @@ export async function POST(req: Request) {
     const res = await fetch("https://soultrack.app.n8n.cloud/webhook/mental-insight", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: userPrompt }), // ✅ pass actual prompt
+      body: JSON.stringify({ text: userPrompt }),
     });
 
     const data = await res.json();
 
     console.log("Insight response from n8n:", data);
 
-    // ✅ Save to MongoDB
     await connectToDatabase();
     await Insight.create({
       mood: concern,
