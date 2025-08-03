@@ -6,6 +6,6 @@ node_modules/
 *.log
 
 dash.mp4
-bg.mp4
+
 dashboard.mp4
 .vercel
