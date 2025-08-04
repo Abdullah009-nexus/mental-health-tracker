@@ -1,25 +1,30 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+
+// ⬇️ This is the key to fix the build error
+export const dynamic = 'force-dynamic'
 
 export default function AuthCallbackPage() {
   const router = useRouter()
   const supabase = createClientComponentClient()
-  const searchParams = useSearchParams()
 
   useEffect(() => {
-    const code = searchParams.get('code')
+    const handleRedirect = async () => {
+      const { error } = await supabase.auth.exchangeCodeForSession(window.location.href)
 
-    if (code) {
-      supabase.auth.exchangeCodeForSession(code).then(() => {
+      if (error) {
+        console.error('Login error:', error.message)
+        router.replace('/login')
+      } else {
         router.replace('/dashboard')
-      })
-    } else {
-      console.error('No code found in URL')
+      }
     }
-  }, [searchParams, supabase, router])
+
+    handleRedirect()
+  }, [router])
 
   return (
     <div className="flex justify-center items-center h-screen bg-black">
