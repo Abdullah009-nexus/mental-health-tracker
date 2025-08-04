@@ -9,9 +9,8 @@ export default function AuthCallbackPage() {
   const supabase = createClientComponentClient();
 
   useEffect(() => {
-    const redirect = async () => {
-      // Exchange code for session (required in production)
-      const { error } = await supabase.auth.exchangeCodeForSession();
+    const exchangeSession = async () => {
+      const { error } = await supabase.auth.exchangeCodeForSession(window.location.href); // ✅ fixed here
 
       if (error) {
         console.error('Exchange error:', error.message);
@@ -21,7 +20,7 @@ export default function AuthCallbackPage() {
       }
     };
 
-    redirect();
+    exchangeSession();
   }, [router]);
 
   return (
