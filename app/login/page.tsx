@@ -11,8 +11,7 @@ export default function Login() {
   const handleLogin = async () => {
     if (!email) return;
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '');
-    const redirectTo = siteUrl ? `${siteUrl}/auth/callback` : undefined;
+    const redirectTo = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://soul-track-v2.vercel.app'}/auth/callback`;
 
     const { error } = await supabase.auth.signInWithOtp({
       email,
@@ -22,9 +21,10 @@ export default function Login() {
     });
 
     if (error) {
+      console.error('Login error:', error.message);
       setMessage('Error sending email. Try again.');
     } else {
-      setMessage('Magic link sent! Check your inbox.');
+      setMessage('✅ Magic link sent! Check your inbox.');
     }
   };
 
