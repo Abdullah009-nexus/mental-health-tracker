@@ -1,7 +1,7 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
 import Navbar from "@/components/ui/Navbar";
-import { usePathname } from "next/navigation"; // 👈 Client-side path hook
+import { usePathname } from "next/navigation"; //  Client-side path hook
 import { ReactNode } from "react";
 
 const inter = Inter({ subsets: ["latin"] });

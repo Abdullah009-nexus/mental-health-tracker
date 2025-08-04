@@ -10,9 +10,15 @@ export default function AuthCallbackPage() {
 
   useEffect(() => {
     const redirect = async () => {
-      //  small delay to allow Supabase to handle session
-      await new Promise((r) => setTimeout(r, 1000));
-      router.replace('/dashboard');
+      // Exchange code for session (required in production)
+      const { error } = await supabase.auth.exchangeCodeForSession();
+
+      if (error) {
+        console.error('Exchange error:', error.message);
+        router.replace('/login');
+      } else {
+        router.replace('/dashboard');
+      }
     };
 
     redirect();
