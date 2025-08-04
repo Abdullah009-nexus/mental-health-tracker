@@ -9,21 +9,22 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const user = localStorage.getItem('mock-user');
-    if (!user) {
-      router.replace('/login');
-    } else {
-      setIsLoggedIn(true);
+    if (typeof window !== 'undefined') {
+      const user = localStorage.getItem('mock-user');
+      if (!user) {
+        router.replace('/login');
+      } else {
+        setIsLoggedIn(true);
+      }
     }
   }, [router]);
 
   if (isLoggedIn === null) {
-    return null;
+    return null; // Still checking
   }
 
   return (
     <div className="relative min-h-screen overflow-hidden text-white">
-      {/* Background Video */}
       <video
         className="fixed top-0 left-0 w-full h-full object-cover z-[-1]"
         autoPlay
@@ -34,9 +35,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <source src="/bg.mp4" type="video/mp4" />
       </video>
 
-      {/* Removed the black/blur overlay */}
-
-      {/* Main Content */}
       <div className="relative z-10">
         <DashboardNavbar />
         <main>{children}</main>
