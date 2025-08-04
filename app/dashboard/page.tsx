@@ -5,13 +5,15 @@ import { useRouter } from 'next/navigation';
 import ChatBox from '@/components/ui/ChatBox';
 import CalmButton from '@/components/ui/CalmButton';
 import { ChatBubbleIcon } from '@radix-ui/react-icons';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 export default function DashboardPage() {
   const [chatOpen, setChatOpen] = useState(false);
   const router = useRouter();
+  const supabase = createClientComponentClient();
 
-  const handleSignOut = () => {
-    localStorage.removeItem('mock-user');
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
     router.push('/');
   };
 

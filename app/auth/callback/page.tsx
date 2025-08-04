@@ -1,31 +1,31 @@
-'use client';
+'use client'
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 export default function AuthCallbackPage() {
-  const router = useRouter();
-  const supabase = createClientComponentClient();
+  const router = useRouter()
+  const supabase = createClientComponentClient()
 
   useEffect(() => {
-    const exchangeSession = async () => {
-      const { error } = await supabase.auth.exchangeCodeForSession(window.location.href); // ✅ fixed here
+    const handleRedirect = async () => {
+      const { error } = await supabase.auth.exchangeCodeForSession(window.location.href)
 
       if (error) {
-        console.error('Exchange error:', error.message);
-        router.replace('/login');
+        console.error('Login error:', error.message)
+        router.replace('/login')
       } else {
-        router.replace('/dashboard');
+        router.replace('/dashboard')
       }
-    };
+    }
 
-    exchangeSession();
-  }, [router]);
+    handleRedirect()
+  }, [router])
 
   return (
-    <div className="flex items-center justify-center h-screen">
-      <p className="text-lg">🔄 Signing you in, please wait...</p>
+    <div className="flex justify-center items-center h-screen">
+      <p>🔐 Signing you in...</p>
     </div>
-  );
+  )
 }

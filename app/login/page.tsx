@@ -11,13 +11,15 @@ export default function Login() {
   const handleLogin = async () => {
     if (!email) return;
 
-    const { error } = await supabase.auth.signInWithOtp({
-  email,
-  options: {
-   emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
-  },
-});
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '');
+    const redirectTo = siteUrl ? `${siteUrl}/auth/callback` : undefined;
 
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: redirectTo,
+      },
+    });
 
     if (error) {
       setMessage('Error sending email. Try again.');
