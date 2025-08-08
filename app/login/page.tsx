@@ -11,7 +11,7 @@ export default function Login() {
   const handleLogin = async () => {
     if (!email) return;
 
-    const redirectTo = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://soul-track-v2.vercel.app'}/auth/callback`;
+    const redirectTo = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://mental-health-tracker-five-navy.vercel.app/'}/auth/callback`;
 
     const { error } = await supabase.auth.signInWithOtp({
       email,
