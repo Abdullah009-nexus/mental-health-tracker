@@ -1,38 +1,33 @@
-'use client';
+'use client'
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import ChatBox from '@/components/ui/ChatBox';
-import CalmButton from '@/components/ui/CalmButton';
-import { ChatBubbleIcon } from '@radix-ui/react-icons';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { User } from '@supabase/auth-helpers-nextjs';
+import { useState, useEffect } from 'react'
+import ChatBox from '@/components/ui/ChatBox'
+import CalmButton from '@/components/ui/CalmButton'
+import { ChatBubbleIcon } from '@radix-ui/react-icons'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { User } from '@supabase/auth-helpers-nextjs'
 
 export default function DashboardPage() {
-  const [chatOpen, setChatOpen] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
-  const router = useRouter();
-  const supabase = createClientComponentClient();
+  const [chatOpen, setChatOpen] = useState(false)
+  const [user, setUser] = useState<User | null>(null)
+  const supabase = createClientComponentClient()
 
   useEffect(() => {
     const getUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+      const { data: { session } } = await supabase.auth.getSession()
       if (session?.user) {
-        setUser(session.user);
+        setUser(session.user)
       }
-    };
-    
-    getUser();
-  }, [supabase.auth]);
+    }
+    getUser()
+  }, [supabase.auth])
 
   const handleSignOut = async () => {
-    const { error } = await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut()
     if (error) {
-      console.error('Error signing out:', error);
-    } else {
-      router.push('/');
+      console.error('Error signing out:', error)
     }
-  };
+  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4 md:px-8 pt-24 text-center">
@@ -41,27 +36,19 @@ export default function DashboardPage() {
       </h1>
       {user && (
         <p className="text-xl text-gray-200 drop-shadow mb-4">
-          Hello, {user.email}! 👋
+          Hello, {user.email}! 
         </p>
       )}
       <p className="text-lg text-gray-200 drop-shadow">
         Access mood tracking, AI chat, and calming tools from the top menu.
       </p>
 
-      {/* CalmButton now visible */}
       <div className="mt-8">
         <CalmButton />
       </div>
 
-      {/* Sign out button for testing */}
-      <button
-        onClick={handleSignOut}
-        className="mt-4 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition"
-      >
-        Sign Out
-      </button>
+      
 
-      {/* Chat icon toggle */}
       <div className="fixed bottom-4 right-4 z-50">
         <button
           onClick={() => setChatOpen(!chatOpen)}
@@ -71,12 +58,11 @@ export default function DashboardPage() {
         </button>
       </div>
 
-      {/* Chat box */}
       {chatOpen && (
         <div className="fixed bottom-20 right-4 z-40 w-full max-w-xs">
           <ChatBox />
         </div>
       )}
     </div>
-  );
+  )
 }
