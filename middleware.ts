@@ -1,36 +1,28 @@
-import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-export async function middleware(req: NextRequest) {
-  // Create response object so Supabase can modify cookies
-  const res = NextResponse.next()
-  const supabase = createMiddlewareClient({ req, res })
+export function middleware(req: NextRequest) {
+  const loggedIn = req.cookies.get('isLoggedIn')?.value === 'true';
+  const pathname = req.nextUrl.pathname;
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
-
-  const pathname = req.nextUrl.pathname
-
-  // 1. Always allow the auth callback route
-  if (pathname.startsWith('/auth/callback')) {
-    return res
+  // Allow static files & API routes
+  if (pathname.startsWith('/_next') || pathname.startsWith('/api')) {
+    return NextResponse.next();
   }
 
-  // 2. If user is logged in and tries to visit login, send to dashboard
-  if (pathname.startsWith('/login') && session) {
-    return NextResponse.redirect(new URL('/dashboard', req.url))
+  // Redirect logged-in users away from /login
+  if (pathname.startsWith('/login') && loggedIn) {
+    return NextResponse.redirect(new URL('/dashboard', req.url));
   }
 
-  // 3. If user is NOT logged in and tries to visit dashboard, send to login
-  if (pathname.startsWith('/dashboard') && !session) {
-    return NextResponse.redirect(new URL('/login', req.url))
+  // Protect dashboard
+  if (pathname.startsWith('/dashboard') && !loggedIn) {
+    return NextResponse.redirect(new URL('/login', req.url));
   }
 
-  return res
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/dashboard', '/login', '/auth/callback'],
-}
+  matcher: ['/dashboard/:path*', '/login'],
+};

@@ -1,31 +1,27 @@
 'use client';
 
 import { useState } from 'react';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { useRouter } from 'next/navigation';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
-  const supabase = createClientComponentClient();
+  const router = useRouter();
 
-  const handleLogin = async () => {
-    if (!email) return;
-
-    const redirectTo = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://mental-health-tracker-five-navy.vercel.app/'}/auth/callback`;
-
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: redirectTo,
-      },
-    });
-
-    if (error) {
-      console.error('Login error:', error.message);
-      setMessage('Error sending email. Try again.');
-    } else {
-      setMessage('✅ Magic link sent! Check your inbox.');
+  const handleLogin = () => {
+    if (!email) {
+      setMessage('Please enter an email.');
+      return;
     }
+
+    // Simulate successful login by setting a cookie
+    document.cookie = "isLoggedIn=true; path=/; max-age=86400"; // expires in 1 day
+
+    // Optionally store email locally
+    localStorage.setItem('userEmail', email);
+
+    // Redirect to dashboard immediately
+    router.push('/dashboard');
   };
 
   return (
@@ -43,9 +39,9 @@ export default function Login() {
       </div>
 
       <div className="fixed top-0 left-0 w-full h-full z-10 flex flex-col items-center justify-center px-4 text-white text-center bg-black/30 backdrop-blur-sm">
-        <h1 className="text-4xl font-bold mb-4 drop-shadow-md">Magic Link Sign In</h1>
+        <h1 className="text-4xl font-bold mb-4 drop-shadow-md">Dummy Login</h1>
         <div className="w-full max-w-md bg-black/40 p-6 rounded-xl shadow-lg space-y-4">
-          <p className="text-lg">Enter your email to sign in.</p>
+          <p className="text-lg">Enter your email to sign in (dummy mode).</p>
           <input
             type="email"
             placeholder="your@email.com"
@@ -57,7 +53,7 @@ export default function Login() {
             onClick={handleLogin}
             className="w-full py-2 px-4 rounded-md border border-white text-white hover:bg-white hover:text-black transition"
           >
-            Send Magic Link
+            Sign In
           </button>
           {message && <p className="text-green-400">{message}</p>}
         </div>
